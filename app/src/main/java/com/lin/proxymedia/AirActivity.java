@@ -12,7 +12,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class AirActivitu extends AppCompatActivity {
+public class AirActivity extends AppCompatActivity {
     private GLSurfaceView mSurfaceView;
 
     @Override
@@ -71,8 +71,8 @@ public class AirActivitu extends AppCompatActivity {
                     .order(ByteOrder.nativeOrder())
                     .asFloatBuffer();
 
-            fragmentShaderSource = Utils.readAssertResource(AirActivitu.this, "simple_fragment_shader.glsl");
-            vertexShaderSource = Utils.readAssertResource(AirActivitu.this, "simple_vertex_shader.glsl");
+            fragmentShaderSource = Utils.readAssertResource(AirActivity.this, "simple_fragment_shader.glsl");
+            vertexShaderSource = Utils.readAssertResource(AirActivity.this, "simple_vertex_shader.glsl");
             vertexData.put(tableVerticesWithTraingles);
         }
 

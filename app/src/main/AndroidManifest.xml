@@ -9,10 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OpenGLES20Activity">
-
-        </activity>
-        <activity android:name=".AirActivitu">
+        <activity android:name=".AirActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

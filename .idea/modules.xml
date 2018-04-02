@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LearnOEL.iml" filepath="$PROJECT_DIR$/LearnOEL.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ProxyMedia.iml" filepath="$PROJECT_DIR$/ProxyMedia.iml" />
+      <module fileurl="file://C:\Users\linchen\Desktop\LearnOEL\LearnOEL.iml" filepath="C:\Users\linchen\Desktop\LearnOEL\LearnOEL.iml" />
+      <module fileurl="file://C:\Users\linchen\Desktop\LearnOEL\ProxyMedia.iml" filepath="C:\Users\linchen\Desktop\LearnOEL\ProxyMedia.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\linchen\Desktop\LearnOEL\app\app.iml" filepath="C:\Users\linchen\Desktop\LearnOEL\app\app.iml" />
     </modules>
   </component>
 </project>
