@@ -2,6 +2,7 @@ package com.lin.proxymedia;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -48,22 +49,25 @@ public class AirActivity extends AppCompatActivity {
     private class SRenderer implements GLSurfaceView.Renderer {
         private static final String A_COLOR = "a_Color";//与glsl文件对应
         private static final String A_POSITION = "a_Position";//与glsl文件对应
+        private static final String U_MATRIX = "u_Matrix";//与glsl文件对应
+        private final float[] projectionMatrix = new float[16];//4*4矩阵
+        private int uMatrixLocation;
         private int aPositionLocation;
         private int aColorLocation;
         //        private int uColorLocation;
         float[] tableVerticesWithTraingles = {
-                0f, 0f,        1f, 1f, 1f,
-                - 0.5f, -0.5f, 0.3f, 0.7f, 0.7f,
-                0.5f, -0.5f,   0.4f, 0.7f, 0.7f,
-                0.5f, 0.5f,    0.7f, 0.1f, 1f,
-                -0.5f, 0.5f,   1f, 0.7f, 0.7f,
-                -0.5f, -0.5f,  0.7f, 0.2f, 0.2f,
+                0f, 0f, 1f, 1f, 1f,
+                -0.5f, -0.5f, 0.3f, 0.7f, 0.7f,
+                0.5f, -0.5f, 0.4f, 0.7f, 0.7f,
+                0.5f, 0.5f, 0.7f, 0.1f, 1f,
+                -0.5f, 0.5f, 1f, 0.7f, 0.7f,
+                -0.5f, -0.5f, 0.7f, 0.2f, 0.2f,
                 //line
-                -0.5f, 0f,     1f, 0f, 0f,
-                0.5f, 0f,      1f, 0f, 0f,
+                -0.5f, 0f, 1f, 0f, 0f,
+                0.5f, 0f, 1f, 0f, 0f,
                 //Mallets
-                0f, -0.25f,    0f, 0f, 1f,
-                0f, 0.25f,     1f, 0f, 0f};
+                0f, -0.25f, 0f, 0f, 1f,
+                0f, 0.25f, 1f, 0f, 0f};
         private final FloatBuffer vertexData;
 
         public SRenderer() {
@@ -92,6 +96,7 @@ public class AirActivity extends AppCompatActivity {
             int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderSource);
             mProgramObjId = ShaderHelper.linkProgram(vertexShader, fragmentShader);
             GLES20.glUseProgram(mProgramObjId);
+            uMatrixLocation = GLES20.glGetUniformLocation(mProgramObjId, U_MATRIX);
 
             aPositionLocation = GLES20.glGetAttribLocation(mProgramObjId, A_POSITION);
             vertexData.position(0);//aPositionLocation起点
@@ -110,11 +115,21 @@ public class AirActivity extends AppCompatActivity {
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             GLES20.glViewport(0, 0, width, height);
+            final float aspectRatio = width > height ? ((float) width / height) : ((float) height / width);
+            if (width > height) {
+                Matrix.orthoM(projectionMatrix, 0,
+                        -aspectRatio, aspectRatio, -1f, 1f, -1f, 1f);
+            } else {
+                Matrix.orthoM(projectionMatrix, 0,
+                        -1, 1f, -aspectRatio, aspectRatio, -1f, 1f);
+            }
         }
 
         @Override
         public void onDrawFrame(GL10 gl) {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            GLES20.glUniformMatrix4fv(uMatrixLocation, 1,
+                    false, projectionMatrix, 0);
             //该方法相当于设置画笔的颜色：色值，红，绿，蓝
             //因为色值已经在数组中说明了，所以，不需要人工画上去了
 //            GLES20.glUniform4f(uColorLocation, 1f, 1f, 1f, 1f);
@@ -127,13 +142,13 @@ public class AirActivity extends AppCompatActivity {
              */
             GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 6);
 //            GLES20.glUniform4f(uColorLocation, 1f, 0f, 0f, 1f);
-         //   画线
-            GLES20.glDrawArrays(GLES20.GL_LINES,6,2);
+            //   画线
+            GLES20.glDrawArrays(GLES20.GL_LINES, 6, 2);
             //画mallets
 //            GLES20.glUniform4f(uColorLocation, 0f, 0f, 1f, 1f);
-            GLES20.glDrawArrays(GLES20.GL_POINTS,8,1);
+            GLES20.glDrawArrays(GLES20.GL_POINTS, 8, 1);
 //            GLES20.glUniform4f(uColorLocation, 0.5f, 0.5f, 0.3f, 1f);
-            GLES20.glDrawArrays(GLES20.GL_POINTS,9,1);
+            GLES20.glDrawArrays(GLES20.GL_POINTS, 9, 1);
         }
     }
 
