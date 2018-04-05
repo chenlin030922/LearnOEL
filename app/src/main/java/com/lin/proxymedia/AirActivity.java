@@ -37,7 +37,7 @@ public class AirActivity extends AppCompatActivity {
         mSurfaceView.onPause();
     }
 
-    private static final int POSITION_COMPONENT_COUNT = 2;
+    private static final int POSITION_COMPONENT_COUNT = 4;
     private static final int COLOR_COMPONENT_COUNT = 3;
     private static final int BYTES_PER_FLOAT = 4;
     private static final int STRIDE = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) *
@@ -56,18 +56,18 @@ public class AirActivity extends AppCompatActivity {
         private int aColorLocation;
         //        private int uColorLocation;
         float[] tableVerticesWithTraingles = {
-                0f, 0f, 1f, 1f, 1f,
-                -0.5f, -0.5f, 0.3f, 0.7f, 0.7f,
-                0.5f, -0.5f, 0.4f, 0.7f, 0.7f,
-                0.5f, 0.5f, 0.7f, 0.1f, 1f,
-                -0.5f, 0.5f, 1f, 0.7f, 0.7f,
-                -0.5f, -0.5f, 0.7f, 0.2f, 0.2f,
+                0f, 0f, 0f,1.5f,      1f, 1f, 1f,
+                -0.5f, -0.8f,0f,1f, 0.3f, 0.7f, 0.7f,
+                0.5f, -0.8f, 0f,1f, 0.4f, 0.7f, 0.7f,
+                0.5f, 0.8f, 0f,2f,  0.7f, 0.1f, 1f,
+                -0.5f, 0.8f, 0f,2f ,1f, 0.7f, 0.7f,
+                -0.5f, -0.8f,0f,1f, 0.7f, 0.2f, 0.2f,
                 //line
-                -0.5f, 0f, 1f, 0f, 0f,
-                0.5f, 0f, 1f, 0f, 0f,
+                -0.5f, 0f,0f,1.5f, 1f, 0f, 0f,
+                0.5f, 0f,0f,1.5f, 1f, 0f, 0f,
                 //Mallets
-                0f, -0.25f, 0f, 0f, 1f,
-                0f, 0.25f, 1f, 0f, 0f};
+                0f, -0.4f, 0f,1.25f,0f, 0f, 1f,
+                0f, 0.4f, 0f,1.75f,1f, 0f, 0f};
         private final FloatBuffer vertexData;
 
         public SRenderer() {
