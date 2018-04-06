@@ -55,29 +55,28 @@ public class AirActivity extends AppCompatActivity {
         private int aPositionLocation;
         private int aColorLocation;
         //        private int uColorLocation;
-        float[] tableVerticesWithTraingles = {
-                0f, 0f, 0f,1.5f,      1f, 1f, 1f,
-                -0.5f, -0.8f,0f,1f, 0.3f, 0.7f, 0.7f,
-                0.5f, -0.8f, 0f,1f, 0.4f, 0.7f, 0.7f,
-                0.5f, 0.8f, 0f,2f,  0.7f, 0.1f, 1f,
-                -0.5f, 0.8f, 0f,2f ,1f, 0.7f, 0.7f,
-                -0.5f, -0.8f,0f,1f, 0.7f, 0.2f, 0.2f,
+        float[] tableVerticesWithTriangles = {
+                0f, 0f,       0f, 1f, 1f, 1f, 1f,
+                -0.5f, -0.8f, 0f, 1f, 0.3f, 0.7f, 0.7f,
+                0.5f, -0.8f,  0f, 1f, 0.4f, 0.7f, 0.7f,
+                0.5f, 0.8f,   0f, 1f, 0.7f, 0.1f, 1f,
+                -0.5f, 0.8f,  0f, 1f, 1f, 0.7f, 0.7f,
+                -0.5f, -0.8f, 0f, 1f, 0.7f, 0.2f, 0.2f,
                 //line
-                -0.5f, 0f,0f,1.5f, 1f, 0f, 0f,
-                0.5f, 0f,0f,1.5f, 1f, 0f, 0f,
+                -0.5f, 0f,    0f, 1f, 1f, 0f, 0f,
+                0.5f, 0f,     0f, 1f, 1f, 0f, 0f,
                 //Mallets
-                0f, -0.4f, 0f,1.25f,0f, 0f, 1f,
-                0f, 0.4f, 0f,1.75f,1f, 0f, 0f};
+                0f, -0.4f,    0f, 1f, 0f, 0f, 1f,
+                0f, 0.4f,     0f, 1f, 1f, 0f, 0f};
         private final FloatBuffer vertexData;
-
         public SRenderer() {
-            vertexData = ByteBuffer.allocateDirect(tableVerticesWithTraingles.length * BYTES_PER_FLOAT)
+            vertexData = ByteBuffer.allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)
                     .order(ByteOrder.nativeOrder())
                     .asFloatBuffer();
 
             fragmentShaderSource = Utils.readAssertResource(AirActivity.this, "simple_fragment_shader.glsl");
             vertexShaderSource = Utils.readAssertResource(AirActivity.this, "simple_vertex_shader.glsl");
-            vertexData.put(tableVerticesWithTraingles);
+            vertexData.put(tableVerticesWithTriangles);
         }
 
         /**
@@ -115,14 +114,24 @@ public class AirActivity extends AppCompatActivity {
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             GLES20.glViewport(0, 0, width, height);
-            final float aspectRatio = width > height ? ((float) width / height) : ((float) height / width);
-            if (width > height) {
-                Matrix.orthoM(projectionMatrix, 0,
-                        -aspectRatio, aspectRatio, -1f, 1f, -1f, 1f);
-            } else {
-                Matrix.orthoM(projectionMatrix, 0,
-                        -1, 1f, -aspectRatio, aspectRatio, -1f, 1f);
-            }
+
+//            final float aspectRatio = width > height ? ((float) width / height) : ((float) height / width);
+//            if (width > height) {
+//                Matrix.orthoM(projectionMatrix, 0,
+//                        -aspectRatio, aspectRatio, -1f, 1f, -1f, 1f);
+//            } else {
+//                Matrix.orthoM(projectionMatrix, 0,
+//                        -1, 1f, -aspectRatio, aspectRatio, -1f, 1f);
+//            }
+            final float[] modelMatrix = new float[16];
+            MatrixHelper.perspectiveM(projectionMatrix, 45,
+                    ((float) width) / ((float) height), 1f, 10f);
+//            //初始化一个Matrix
+            Matrix.setIdentityM(modelMatrix,0);
+            float[] temp = new float[16];
+            Matrix.translateM(modelMatrix,0,0,0,-2f);
+            Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
+            System.arraycopy(temp,0,projectionMatrix,0,temp.length);
         }
 
         @Override
