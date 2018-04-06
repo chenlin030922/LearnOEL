@@ -129,7 +129,8 @@ public class AirActivity extends AppCompatActivity {
 //            //初始化一个Matrix
             Matrix.setIdentityM(modelMatrix,0);
             float[] temp = new float[16];
-            Matrix.translateM(modelMatrix,0,0,0,-2f);
+            Matrix.translateM(modelMatrix,0,0,0,-2.6f);
+            Matrix.rotateM(modelMatrix,0,-60f,1f,0,0);
             Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
             System.arraycopy(temp,0,projectionMatrix,0,temp.length);
         }
