@@ -62,4 +62,16 @@ public class ShaderHelper {
         Log.v(TAG, GLES20.glGetProgramInfoLog(programId));
         return validateStatus[0] != 0;
     }
+
+    public static int buildProgram(String vertexShaderSource
+            , String fragmentShaderSource) {
+        int vertextShader = compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderSource);
+        int fragShader = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderSource);
+        int program = linkProgram(vertextShader, fragShader);
+        boolean canUse = validateProgram(program);
+//        if (canUse) {
+//
+//        }
+        return program;
+    }
 }

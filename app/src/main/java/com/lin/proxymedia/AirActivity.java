@@ -13,6 +13,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.lin.proxymedia.Constants.BYTES_PER_FLOAT;
+
 public class AirActivity extends AppCompatActivity {
     private GLSurfaceView mSurfaceView;
 
@@ -22,7 +24,9 @@ public class AirActivity extends AppCompatActivity {
         mSurfaceView = new GLSurfaceView(this);
         setContentView(mSurfaceView);
         mSurfaceView.setEGLContextClientVersion(2);//GL 2
-        mSurfaceView.setRenderer(new SRenderer());
+        mSurfaceView.setRenderer(new TextureRenderer(this));
+        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
     }
 
     @Override
@@ -39,7 +43,6 @@ public class AirActivity extends AppCompatActivity {
 
     private static final int POSITION_COMPONENT_COUNT = 4;
     private static final int COLOR_COMPONENT_COUNT = 3;
-    private static final int BYTES_PER_FLOAT = 4;
     private static final int STRIDE = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) *
             BYTES_PER_FLOAT;
     String vertexShaderSource;
