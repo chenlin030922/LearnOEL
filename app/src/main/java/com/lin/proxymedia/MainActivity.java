@@ -1,6 +1,6 @@
 package com.lin.proxymedia;
 
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSurfaceChanged(GL10 unused, int width, int height) {
             //设置 Screen space 的大小
-            GLES20.glViewport(0, 0, width, height);
+            GLES30.glViewport(0, 0, width, height);
         }
 
         //绘制的过程其实就是为 shader 代码变量赋值，并调用绘制命令的过程
