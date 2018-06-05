@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private void intGL() {
         mSurfaceView = findViewById(R.id.gl);
 
-        mSurfaceView.setEGLContextClientVersion(2);
+        mSurfaceView.setEGLContextClientVersion(3);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(new MyRenderer());
         //RenderMode 有两种，RENDERMODE_WHEN_DIRTY 和 RENDERMODE_CONTINUOUSLY，
