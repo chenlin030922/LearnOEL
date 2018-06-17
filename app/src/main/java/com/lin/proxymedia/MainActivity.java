@@ -1,5 +1,8 @@
 package com.lin.proxymedia;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -54,16 +57,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void intGL() {
         mSurfaceView = findViewById(R.id.gl);
-
+        boolean isSupport=detectOpenGLES30();
         mSurfaceView.setEGLContextClientVersion(3);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(new MyRenderer());
         //RenderMode 有两种，RENDERMODE_WHEN_DIRTY 和 RENDERMODE_CONTINUOUSLY，
         // 前者是懒惰渲染，需要手动调用 glSurfaceView.requestRender() 才会进行更新，而后者则是不停渲染。
-        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-
+    private boolean detectOpenGLES30() {
+        ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = am.getDeviceConfigurationInfo();
+        String resulr=Integer.toString(info.reqGlEsVersion, 16);
+        return (info.reqGlEsVersion >= 0x30000);
+    }
     private static class MyRenderer implements GLSurfaceView.Renderer {
         private Triangle mSquare;
 

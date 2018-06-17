@@ -14,16 +14,18 @@ import java.nio.FloatBuffer;
 public class Triangle {
     private FloatBuffer vertexBuffer;
     private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
-                    "void main() {" +
-                    "  gl_Position = vPosition;" +
+            "#version 300 es  \n" +
+                    "layout(location = 0) in vec4 vPosition;\n" +
+                    "void main() {\n" +
+                    "  gl_Position = vPosition;\n" +
                     "}";
 
     private final String fragmentShaderCode =
-            "precision mediump float;" +
-                    "uniform vec4 vColor;" +
-                    "void main() {" +
-                    "  gl_FragColor = vColor;" +
+            "#version 300 es  \n" +
+                    "precision mediump float;\n" +
+                    "out vec4 fragColor;\n" +
+                    "void main() {\n" +
+                    "fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
                     "}";
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
@@ -89,7 +91,6 @@ public class Triangle {
 
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
-
         // Enable a handle to the triangle vertices
         GLES30.glEnableVertexAttribArray(mPositionHandle);
         // Prepare the triangle coordinate data
@@ -98,10 +99,10 @@ public class Triangle {
                 vertexStride, vertexBuffer);
 
         // get handle to fragment shader's vColor member
-        mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
+//        mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
 
         // Set color for drawing the triangle
-        GLES30.glUniform4fv(mColorHandle, 1, color, 0); 
+//        GLES30.glUniform4fv(mColorHandle, 1, color, 0);
 
         // Draw the triangle
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount);
