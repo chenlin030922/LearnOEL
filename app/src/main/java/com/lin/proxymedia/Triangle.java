@@ -16,16 +16,20 @@ public class Triangle {
     private final String vertexShaderCode =
             "#version 300 es  \n" +
                     "layout(location = 0) in vec4 vPosition;\n" +
+                    "layout(location = 1) in vec4 aColor;\n"+
+                    "out vec4 vColor;"+
                     "void main() {\n" +
-                    "  gl_Position = vPosition;\n" +
+                    "gl_Position = vPosition;\n" +
+                    "vColor=aColor;\n" +
                     "}";
 
     private final String fragmentShaderCode =
             "#version 300 es  \n" +
                     "precision mediump float;\n" +
                     "out vec4 fragColor;\n" +
+                    "in vec4 vColor;" +
                     "void main() {\n" +
-                    "fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
+                    "fragColor = vColor;\n" +
                     "}";
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
@@ -36,7 +40,7 @@ public class Triangle {
     };
     private final int mProgram;
     // Set color with red, green, blue and alpha (opacity) values
-    float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
+    float color[] = { 1.0f,0.0f,0.0f, 1.0f };
     public static int loadShader(int type, String shaderCode){
 
         // create a vertex shader type (GLES30.GL_VERTEX_SHADER)
@@ -99,10 +103,10 @@ public class Triangle {
                 vertexStride, vertexBuffer);
 
         // get handle to fragment shader's vColor member
-//        mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
+        mColorHandle = GLES30.glGetAttribLocation(mProgram, "aColor");
 
         // Set color for drawing the triangle
-//        GLES30.glUniform4fv(mColorHandle, 1, color, 0);
+        GLES30.glVertexAttrib4fv(mColorHandle,  color, 0);
 
         // Draw the triangle
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount);
