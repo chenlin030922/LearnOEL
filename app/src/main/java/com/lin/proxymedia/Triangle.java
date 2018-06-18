@@ -95,13 +95,13 @@ public class Triangle {
 
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
+        createVertextBuffer();
         // Enable a handle to the triangle vertices
         GLES30.glEnableVertexAttribArray(mPositionHandle);
         // Prepare the triangle coordinate data
         GLES30.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
                 GLES30.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
-
+                0, 0);
         // get handle to fragment shader's vColor member
         mColorHandle = GLES30.glGetAttribLocation(mProgram, "aColor");
 
@@ -113,5 +113,14 @@ public class Triangle {
 
         // Disable vertex array
         GLES30.glDisableVertexAttribArray(mPositionHandle);
+    }
+    private void createVertextBuffer(){
+        int[] value = new int[1];
+        GLES30.glGenBuffers(1, value,0);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, value[0]);
+        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER,vertexBuffer.capacity()*4,vertexBuffer,GLES30.GL_STATIC_DRAW);
+    }
+    private void createElementBuffer(){
+
     }
 }
