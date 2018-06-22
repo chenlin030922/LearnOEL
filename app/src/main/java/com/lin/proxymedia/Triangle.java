@@ -35,22 +35,18 @@ public class Triangle {
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     static float triangleCoords[] = {   // in counterclockwise order:
-            0.0f, 0.622008459f, 0.0f, // top
             -0.5f, 0f, 0.0f, // bottom left
+            0.0f, 0.622008459f, 0.0f, // top
             0.5f, 0f, 0.0f,  // bottom right
-            0.5f, 0f, 0.0f,
-            -0.5f, 0f, 0.0f,
             0.0f, -0.622008459f, 0.0f,
     };
     private final int mProgram;
     // Set color with red, green, blue and alpha (opacity) values
     float color[] = {
             1.0f, 0.0f, 0.0f,1f,
-            1.0f, 0.0f, 0.0f,1f,
-            1.0f, 0.0f, 0.0f,1f,
             0f, 1.0f, 0.0f,1f,
-            0f, 1.0f, 0.0f,1f,
-            0f, 1.0f, 0.0f,1f};
+            0f, 0f, 1.0f,1f,
+            0f, 0.0f, 0.0f,1f};
 
     public static int loadShader(int type, String shaderCode) {
 
@@ -65,9 +61,6 @@ public class Triangle {
         return shader;
     }
 
-    private void allocateBuffer(FloatBuffer buffer, int length, float[] coord) {
-
-    }
     public Triangle() {
         // initialize vertex byte buffer for shape coordinates
         ByteBuffer bb = ByteBuffer.allocateDirect(
@@ -141,7 +134,7 @@ public class Triangle {
                 GLES30.GL_FLOAT, false,
                 0, colorBuffer);
         // Draw the triangle
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, vertexCount);
 
         // Disable vertex array
         GLES30.glDisableVertexAttribArray(mPositionHandle);
