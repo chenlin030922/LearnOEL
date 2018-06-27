@@ -43,10 +43,10 @@ public class Triangle {
     private final int mProgram;
     // Set color with red, green, blue and alpha (opacity) values
     float color[] = {
-            1.0f, 0.0f, 0.0f,1f,
-            0f, 1.0f, 0.0f,1f,
-            0f, 0f, 1.0f,1f,
-            0f, 0.0f, 0.0f,1f};
+            1.0f, 0.0f, 0.0f, 1f,
+            0f, 1.0f, 0.0f, 1f,
+            0f, 0f, 1.0f, 1f,
+            0f, 0.0f, 0.0f, 1f};
 
     public static int loadShader(int type, String shaderCode) {
 
@@ -111,6 +111,7 @@ public class Triangle {
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
     private final int colorStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
+
     public void onDraw() {
         // Add program to OpenGL ES environment
         GLES30.glUseProgram(mProgram);
