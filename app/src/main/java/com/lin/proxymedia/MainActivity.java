@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mSurfaceView.setRenderer(new MyRenderer());
         //RenderMode 有两种，RENDERMODE_WHEN_DIRTY 和 RENDERMODE_CONTINUOUSLY，
         // 前者是懒惰渲染，需要手动调用 glSurfaceView.requestRender() 才会进行更新，而后者则是不停渲染。
-        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private boolean detectOpenGLES30() {
@@ -83,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSurfaceChanged(GL10 unused, int width, int height) {
             //设置 Screen space 的大小
-            GLES30.glViewport(0, 0, width, height);
+            mSquare.onSurfaceChange(width,height);
         }
 
         //绘制的过程其实就是为 shader 代码变量赋值，并调用绘制命令的过程
         @Override
         public void onDrawFrame(GL10 unused) {
+            GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
             mSquare.onDraw();
         }
     }
