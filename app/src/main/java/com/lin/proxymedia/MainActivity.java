@@ -3,6 +3,7 @@ package com.lin.proxymedia;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDrawFrame(GL10 unused) {
             GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+            GLES30.glEnable(GLES20.GL_DEPTH_TEST);
+//            GLES30.glEnable(GLES20.GL_CULL_FACE);
             mSquare.onDraw();
         }
     }
