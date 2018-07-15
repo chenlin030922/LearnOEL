@@ -160,7 +160,7 @@ public class Triangle {
         Matrix.setIdentityM(rotateF, 0);
         Matrix.setRotateM(rotateF,0,rotateAgree,0.5f,0.5f,0f);
 
-        Matrix.multiplyMM(projectionMatrix,0,rotateF,0,orthMatrix,0);
+        Matrix.multiplyMM(projectionMatrix,0,orthMatrix,0,rotateF,0);
         rotateAgree+=1;
         if (rotateAgree >=360) {
             rotateAgree=0;
