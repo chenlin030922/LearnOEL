@@ -73,18 +73,20 @@ public class MainActivity extends AppCompatActivity {
         String resulr=Integer.toString(info.reqGlEsVersion, 16);
         return (info.reqGlEsVersion >= 0x30000);
     }
-    private static class MyRenderer implements GLSurfaceView.Renderer {
-        private Triangle mSquare;
-
+    private  class MyRenderer implements GLSurfaceView.Renderer {
+        private GLESImpl mGLES;
         @Override
         public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-            mSquare = new Triangle();
+//            mSquare = new Triangle();
+//            mSquare.setContext(MainActivity.this);
+            mGLES = new Texture();
+            mGLES.setContext(MainActivity.this);
         }
 
         @Override
         public void onSurfaceChanged(GL10 unused, int width, int height) {
             //设置 Screen space 的大小
-            mSquare.onSurfaceChange(width,height);
+            mGLES.onSurfaceChange(width,height);
         }
 
         //绘制的过程其实就是为 shader 代码变量赋值，并调用绘制命令的过程
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
             GLES30.glEnable(GLES20.GL_DEPTH_TEST);
 //            GLES30.glEnable(GLES20.GL_CULL_FACE);
-            mSquare.onDraw();
+            mGLES.onDraw();
         }
     }
 

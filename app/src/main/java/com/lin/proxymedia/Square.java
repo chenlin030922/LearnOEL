@@ -1,5 +1,6 @@
 package com.lin.proxymedia;
 
+import android.content.Context;
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
@@ -17,6 +18,12 @@ public class Square {
     private ShortBuffer drawListBuffer;
     private final int mProgram;
     // number of coordinates per vertex in this array
+
+    protected Context mContext;
+
+    public void setContext(Context context) {
+        mContext = context;
+    }
     static final int COORDS_PER_VERTEX = 3;
     static float squareCoords[] = {
             -0.5f,  0.5f, 0.0f,   // top left
