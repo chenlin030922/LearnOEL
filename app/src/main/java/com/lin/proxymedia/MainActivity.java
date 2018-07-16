@@ -8,11 +8,7 @@ import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -24,16 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRecyclerView = findViewById(R.id.list);
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            list.add(i + "");
-        }
-        MainAdapter adapter = new MainAdapter(list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new StickyItemDecoration<String>(list));
-        mRecyclerView.setAdapter(adapter);
         intGL();
     }
 
@@ -79,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 //            mSquare = new Triangle();
 //            mSquare.setContext(MainActivity.this);
-            mGLES = new Texture();
+            mGLES = new Triangle();
             mGLES.setContext(MainActivity.this);
         }
 

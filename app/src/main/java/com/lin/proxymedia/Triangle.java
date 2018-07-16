@@ -24,7 +24,7 @@ public class Triangle extends GLESImpl {
             "#version 300 es  \n" +
                     "layout(location = 0) in vec4 vPosition;\n" +
                     "layout(location = 1) in vec4 aColor;\n" +
-                    "layout(location=3) in vec2 texCoord;\n"+
+                    "layout(location=3) in vec2 texCoord;\n" +
                     "uniform mat4 aMatrix;\n" +
                     "out vec4 vColor;" +
                     "out vec2 vTextCoord;\n" +
@@ -40,35 +40,98 @@ public class Triangle extends GLESImpl {
                     "out vec4 fragColor;\n" +
                     "in vec4 vColor;" +
                     "in vec2 vTextCoord;\n" +
-                    "uniform sampler2D s_texture;\n"+
+                    "uniform sampler2D s_texture;\n" +
                     "void main() {\n" +
 //                    "fragColor = vColor;\n" +
-                    "fragColor=texture(s_texture,vTextCoord);"+
+                    "fragColor=texture(s_texture,vTextCoord);" +
                     "}";
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     static float triangleCoords[] = {
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f, -0.5f,
-            -0.5f, 0.5f, 0.5f,
-            -0.5f, 0.5f, -0.5f,
-
-            0.5f, -0.5f, 0.5f,
-            0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f, 0.5f,
-            -0.5f, -0.5f, -0.5f,
-
+            //上面
+            0.5f, 0.5f, 0.5f, //0
+            0.5f, 0.5f, -0.5f,//1
+            -0.5f, 0.5f, 0.5f,//2
+            -0.5f, 0.5f, -0.5f,//3
+            //下面
+            0.5f, -0.5f, 0.5f,//4
+            0.5f, -0.5f, -0.5f,//5
+            -0.5f, -0.5f, 0.5f,//6
+            -0.5f, -0.5f, -0.5f,//7
+            //前面0,2,4,6
+            0.5f, 0.5f, 0.5f,//8
+            -0.5f, 0.5f, 0.5f,//9
+            0.5f, -0.5f, 0.5f,//10
+            -0.5f, -0.5f, 0.5f,//11
+            //后面1,3,7,5
+            0.5f, 0.5f, -0.5f,//12
+            -0.5f, 0.5f, -0.5f,//13
+            0.5f, -0.5f, -0.5f,//15
+            -0.5f, -0.5f, -0.5f,//14
+            //左面2,3,6,7
+            -0.5f, 0.5f, 0.5f,//16
+            -0.5f, 0.5f, -0.5f,//17
+            -0.5f, -0.5f, 0.5f,//18
+            -0.5f, -0.5f, -0.5f,//19
+            //右面0,1,4,5
+            0.5f, 0.5f, 0.5f,//20
+            0.5f, 0.5f, -0.5f,//21
+            0.5f, -0.5f, 0.5f,//22
+            0.5f, -0.5f, -0.5f//23
     };
+
     float[] textCoord = {
             0f, 0f,
             1f, 0f,
             0f, 1f,
             1f, 1f,
 
+            0f, 0f,
+            1f, 0f,
             0f, 1f,
             1f, 1f,
+
             0f, 0f,
+            1f, 0f,
+            0f, 1f,
+            1f, 1f,
+
+            0f, 0f,
+            1f, 0f,
+            0f, 1f,
+            1f, 1f,
+
+            0f, 0f,
+            1f, 0f,
+            0f, 1f,
+            1f, 1f,
+
+            0f, 0f,
+            1f, 0f,
+            0f, 1f,
             1f, 1f
+    };
+    byte indicates[] = {
+            //上
+            0, 1, 2,
+            1, 2, 3,
+            //下
+            4, 5, 6,
+            5, 6, 7,
+            //左
+            16, 17, 18,
+            17, 18, 19,
+            //右
+            20, 21, 22,
+            21, 22, 23,
+            //前
+            8, 9, 10,
+            9, 10, 11,
+            //后
+            12, 13, 14,
+            13, 14, 15
+
+
     };
     // Set color with red, green, blue and alpha (opacity) values
     float color[] = {
@@ -81,29 +144,8 @@ public class Triangle extends GLESImpl {
             0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 1.0f
     };
-    byte indicates[] = {
-            //上
-            0, 1, 2,
-            1, 2, 3,
-            //下
-            4, 5, 6,
-            5, 6, 7,
-            //左
-            2, 3, 6,
-            3, 6, 7,
-            //右
-            0, 1, 4,
-            1, 4, 5,
-            //前
-            0, 2, 4,
-            2, 4, 6,
-            //后
-            1, 3, 7,
-            1, 7, 5
+    private FloatBuffer textBuffer;
 
-
-    };
-private  FloatBuffer textBuffer;
     public static int loadShader(int type, String shaderCode) {
 
         // create a vertex shader type (GLES30.GL_VERTEX_SHADER)
