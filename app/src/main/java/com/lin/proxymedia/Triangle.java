@@ -175,6 +175,7 @@ public class Triangle extends GLESImpl {
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
     private final int colorStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
+    private int textId = -1;
 
     public void onDraw() {
         // Add program to OpenGL ES environment
@@ -190,16 +191,17 @@ public class Triangle extends GLESImpl {
             rotateAgree = 0;
         }
         GLES30.glUseProgram(mProgram);
-
-        int texCoord = GLES30.glGetAttribLocation(mProgram, "texCoord");
-        GLES30.glEnableVertexAttribArray(texCoord);
-        GLES30.glVertexAttribPointer(texCoord, 2, GLES30.GL_FLOAT, false, 0, textBuffer);
-        int textureId = loadTexture(mContext, R.drawable.aa);
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
-        int uTextureUnitLocation = GLES30.glGetUniformLocation(mProgram, "s_texture");
-        GLES30.glUniform1i(uTextureUnitLocation, 0);
-
+        if (textId == -1) {
+            int texCoord = GLES30.glGetAttribLocation(mProgram, "texCoord");
+            GLES30.glEnableVertexAttribArray(texCoord);
+            GLES30.glVertexAttribPointer(texCoord, 2, GLES30.GL_FLOAT, false, 0, textBuffer);
+            int textureId = loadTexture(mContext, R.drawable.aa);
+            GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+            textId=textureId;
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
+            int uTextureUnitLocation = GLES30.glGetUniformLocation(mProgram, "s_texture");
+            GLES30.glUniform1i(uTextureUnitLocation, 0);
+        }
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
 //        createVertextBuffer();
@@ -268,7 +270,9 @@ public class Triangle extends GLESImpl {
         GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, vertexBuffer.capacity() * 4, vertexBuffer, GLES30.GL_STATIC_DRAW);
     }
 
-    public static int loadTexture(Context context, int resId) {
+    private Bitmap mBitmap;
+
+    public int loadTexture(Context context, int resId) {
         int[] textureObjIds = new int[1];
         GLES30.glGenTextures(1, textureObjIds, 0);
         if (textureObjIds[0] == 0) {
@@ -276,16 +280,17 @@ public class Triangle extends GLESImpl {
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
-        if (bitmap == null) {
-            GLES30.glDeleteTextures(1, textureObjIds, 0);
-            return 0;
+        if (mBitmap == null) {
+            mBitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+            if (mBitmap == null) {
+                GLES30.glDeleteTextures(1, textureObjIds, 0);
+                return 0;
+            }
         }
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureObjIds[0]);//bind
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
-        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);
-        bitmap.recycle();
+        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, mBitmap, 0);
         GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);//unbind
         return textureObjIds[0];
